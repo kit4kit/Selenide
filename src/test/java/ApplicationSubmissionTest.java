@@ -1,11 +1,13 @@
 import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
+
+import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 
 
 import java.time.LocalDate;
-
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.open;
@@ -18,13 +20,13 @@ public class ApplicationSubmissionTest {
         open("http://localhost:9999");
         $("[placeholder='Город']").setValue("Волгоград"); //Город
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
-        LocalDate date = LocalDate.now();
-        date.plusDays(3);
-        $("[placeholder='Дата встречи']").setValue(date.format(date)); //Дата
+        LocalDate dateOfMeeting = LocalDate.now().plusDays(3);
+        String inputDate = dateOfMeeting.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[placeholder='Дата встречи']").setValue(inputDate);
         $("[name='name']").setValue("Иванов Иван"); //Фамилия Имя
         $("[name='phone']").setValue("+79998880011"); //Телефон
         $("[data-test-id='agreement']").click();
         $(withText("Забронировать")).click(); //Забронировать
-        $(byText("Успешно")).shouldBe(visible, 15000);
+        $(byText("[data-test-id=notification] .notification__content")).shouldBe(Condition.attribute(inputDate), Duration.ofMillis(15000));
     }
 }
