@@ -32,6 +32,5 @@ public class ApplicationSubmissionTest {
         $("[data-test-id=notification] .notification__content")
                 .shouldBe(Condition.visible, Duration.ofMillis(15000))
                 .shouldHave(exactText("Встреча успешно забронирована на " + inputDate));
-
     }
 }
