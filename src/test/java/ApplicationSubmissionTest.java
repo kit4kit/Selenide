@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 
 import java.time.LocalDate;
+
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
@@ -27,6 +29,10 @@ public class ApplicationSubmissionTest {
         $("[name='phone']").setValue("+79998880011"); //Телефон
         $("[data-test-id='agreement']").click();
         $(withText("Забронировать")).click(); //Забронировать
-        $(byText("[data-test-id=notification] .notification__content")).shouldBe(Condition.attribute(inputDate), Duration.ofMillis(15000));
+        $(byText("Успешно!")).shouldBe(Condition.visible, Duration.ofMillis(15000));
+        $("[data-test-id=notification] .notification__content")
+                .shouldBe(Condition.visible, Duration.ofMillis(15000))
+                .shouldHave(exactText("Встреча успешно забронирована на " + inputDate));
+
     }
 }
